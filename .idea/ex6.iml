@@ -12,27 +12,25 @@
       <sourceFolder url="file://$MODULE_DIR$/src/MatrixNode.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Tcp.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/LuxuryCab.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/SearchAlgorithm.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/InputParser.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/AbstractPoint.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Manufacturer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/InputParser.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Cab.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Map.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/TaxiCenter.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Status.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Passenger.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/InputParser.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Color.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/MatrixNode.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Cab.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Driver.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/DriverOperator.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Socket.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Trip.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Map.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/DriverOperator.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Map.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Status.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/MapRestartListener.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/StandardCab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Matrix.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Cab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/StandardCab.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Driver.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/MatrixNode.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Point.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Passenger.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Trip.cpp" isTestSource="false" />
@@ -40,12 +38,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/ThreadInfo.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/MainFlow.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Driver.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/AbstractPoint.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/SearchAlgorithm.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Trip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Bfs.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/ThreadInfo.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/TaxiCenter.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/InputParser.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Matrix.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Manufacturer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Color.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/LuxuryCab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/AbstractNode.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/SearchAlgorithm.cpp" isTestSource="false" />
