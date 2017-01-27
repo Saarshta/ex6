@@ -10,7 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Bfs.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Point.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/MatrixNode.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Tcp.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/LuxuryCab.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/AbstractPoint.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Manufacturer.h" isTestSource="false" />
@@ -18,6 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Cab.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Map.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/TaxiCenter.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Status.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Passenger.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Cab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Driver.cpp" isTestSource="false" />
@@ -25,10 +25,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Socket.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/DriverOperator.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Map.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Status.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Tcp.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/MapRestartListener.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/StandardCab.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Matrix.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/ThreadPool.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/ThreadPool.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/StandardCab.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/MatrixNode.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Point.h" isTestSource="false" />
@@ -39,6 +40,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/MainFlow.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Driver.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/SearchAlgorithm.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Job.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Trip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Bfs.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/ThreadInfo.h" isTestSource="false" />
@@ -49,7 +51,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/LuxuryCab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/AbstractNode.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/SearchAlgorithm.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Job.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Socket.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Matrix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/client.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />

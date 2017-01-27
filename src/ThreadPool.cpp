@@ -21,6 +21,7 @@ void ThreadPool::doJobs() {
 			Job* job = jobs_queue.front();
 			jobs_queue.pop();
 			pthread_mutex_unlock(&lock);
+			//run the task function
 			job->execute();
 		}
 		else {
@@ -44,9 +45,13 @@ ThreadPool::ThreadPool(int threads_num) : threads_num(threads_num), stop(false) 
 		pthread_create(threads + i, NULL, startJobs, this);
 	}
 }
-
+//do not execute more jobs
 void ThreadPool::terminate() {
 	stop = true;
+	//waiting for current jobs to be finished.
+	for (int i = 0; i < threads_num; i++) {
+		pthread_join(*(threads + i), NULL);
+	}
 }
 
 ThreadPool::~ThreadPool() {
@@ -54,8 +59,8 @@ ThreadPool::~ThreadPool() {
 	delete[] threads;
 	pthread_mutex_destroy(&lock);
 }
-
+//if dont have jobs return true.
 bool ThreadPool::isEmpty() {
-
+	return jobs_queue.size()==0;
 }
 

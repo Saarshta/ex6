@@ -108,7 +108,8 @@ void* TaxiCenter::calcAndAddCall(void* info){
     Trip* trip= (*threadInfo).trip;
     taxiC->addCall(trip);
     pthread_mutex_unlock(&mutex);
-
+    //we can delete threadInfo, we dont use it anymore and its on heap
+    delete threadInfo;
 }
 
 

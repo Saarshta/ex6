@@ -33,6 +33,9 @@ private:
 public:
     MainFlow(int sizeX, int sizeY, vector<Point> obstacle, char** argv);
 
+    Trip* readTripFromUser();
+
+    Cab* readCabFromser();
 
     ~MainFlow();
 
