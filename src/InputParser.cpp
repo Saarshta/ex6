@@ -121,18 +121,64 @@ Cab* InputParser::createCab(vector<string> inputParts) {
         return NULL;
     }
 
+    Cab* cab = NULL;
     if (cabType == 1) { //standard cab
-        Cab *cab = new StandardCab(newCabID, manu, color);
-        this->taxiCenter->addCab(cab);
+        cab = new StandardCab(id, manu, color);
     } else if (cabType == 2) { //luxury cab
-        Cab *cab = new LuxuryCab(newCabID, manu, color);
-        this->taxiCenter->addCab(cab);
+        cab = new LuxuryCab(id, manu, color);
+    }
+
+    return cab;
+
+}
+
+Map* InputParser::createMap(vector<string> inputParts) {
+    //cin >> id >> blank >> age >> blank >> maritalSign >> blank >>
+    //exp >> blank >> cabID;
+    if (inputParts.size() != 5) {
+        return NULL;
+    }
+    int age, id, exp, cabID;
+    Status status;
+    stringstream ss(inputParts[0]);
+    if (!(ss >> id && ss.eof())) {
+        return NULL;
+    }
+
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[1]);
+    if (!(ss >> age &&  ss.eof())) {
+        return NULL;
+    }
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[3]);
+    if (!(ss >> exp &&  ss.eof())) {
+        return NULL;
+    }
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[4]);
+    if (!(ss >> cabID &&  ss.eof())) {
+        return NULL;
+    }
+    if (age<=0 || id<0 || exp<0) {
+        return NULL;
+    }
+
+    if(!(inputParts[2].compare("M"))) {
+        status = Status::MARRIED;
+    } else if (!(inputParts[2].compare("S"))) {
+        status = Status::SINGLE;
+    } else if (!(inputParts[2].compare("D"))) {
+        status = Status::DIVORCED;
+    } else if (!(inputParts[2].compare("W"))) {
+        status = Status::WIDOWED;
     } else {
-        throw invalid_argument("cab type is invalid");
+        return NULL;
     }
 
     return new Driver(id, age, status, exp, cabID);
-
-
 
 }

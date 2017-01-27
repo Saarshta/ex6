@@ -15,6 +15,7 @@ public:
     static vector<string> splitString(string stringToSplit);
     static Driver* createDriver(vector<string> inputParts);
     static Cab* createCab(vector<string> inputParts);
+    static Map* createMap(vector<string> inputParts);
 };
 
 
