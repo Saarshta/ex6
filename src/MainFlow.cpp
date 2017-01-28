@@ -47,8 +47,7 @@ void MainFlow::run(){
         switch (option) {
             case 1: // add a driver
             {
-                //test
-                cout << "entering driver" << endl;
+
                 this->currentOperation=1;
                 // Receiving number of drivers.
                 cin >> driversNum;
@@ -67,8 +66,7 @@ void MainFlow::run(){
             }
             case 2: // add a trip to taxiCenter as call
             {
-                //test
-                cout << "entering trip" << endl;
+
                 this->currentOperation=2;
 
                 string tripString;
@@ -84,14 +82,12 @@ void MainFlow::run(){
                     Job *calcTripJob = new Job(taxiCenter->calcAndAddCall, (void *) threadInfo);
                     pool.addJob(calcTripJob);
                 }
-                //test
-                cout << "exiting trip" << endl;
+
                 break;
             }
             case 3: // add a cab
             {
-                //test
-                cout << "entering cab" << endl;
+
                 this->currentOperation = 3;
                 string cabString;
                 getline(cin, cabString);
@@ -101,8 +97,7 @@ void MainFlow::run(){
                 } else {
                     this->taxiCenter->addCab(newCab);
                 }
-                //test
-                cout << "exiting cab" << endl;
+
                 break;
             }
             case 4: // print a driver location
@@ -128,13 +123,11 @@ void MainFlow::run(){
                 }
                 //wait for pool to finish calculating trips
                 while(pool.getJobsCounter() != tripsCounter){
-                    //test
-                    cout << "in pool : "<< pool.getJobsCounter() <<" in mainflow : " << tripsCounter << endl;
+
                     sleep(1);
                 }
 
-                //test
-                cout << "finisehd waiting"<< endl;
+
 
                 //attach calls to drivers on server
                 this->taxiCenter->handleOpenCalls();
@@ -203,8 +196,7 @@ void* MainFlow::communicate(void* mainFlow) {
     boost::archive::binary_iarchive ia(s2);
     ia >> driver;
 
-    //test
-    cout << "got driver , id: " << driver->getId() << endl;
+
 
     // Setting map, starting point, trip.
     Point startPos(0, 0);
@@ -251,6 +243,7 @@ void MainFlow::handleDriver(Driver* driver, int acceptNumber, char* buffer) {
             }
             //check if the driver has trip
             if(currentPosition != lastPosition){
+
                 // Serialize and send new location of driver.
                 std::string serial_str;
                 boost::iostreams::back_insert_device<std::string> inserter(serial_str);

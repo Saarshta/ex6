@@ -10,30 +10,26 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-    string sizes, numOfObsts, Obsts;
-    MainFlow* mainFlow = NULL;
+    string sizes, numOfObsts;
+    MainFlow *mainFlow = NULL;
+    bool isSizesValid;
     while (mainFlow == NULL) {
-        getline(cin, sizes);
+
+        isSizesValid = false;
+        while (!isSizesValid) {
+            getline(cin, sizes);
+            if(!(isSizesValid = InputParser::isMapSizesValid(InputParser::splitString(sizes, ' ')))){
+                cout << "-1"<< endl;
+            }
+        }
         getline(cin, numOfObsts);
         mainFlow = InputParser::createMainFlow(InputParser::splitString(sizes, ' '),
                                                InputParser::splitString(numOfObsts, ' '), argv);
+        if(mainFlow == NULL){
+            cout<<"-1"<<endl;
+        }
     }
 
-//    int sizeX;
-//    int sizeY;
-//    int numOfObst;
-//    char blank;
-//    int obstX;
-//    int obstY;
-//    vector<Point> obstacles;
-//    cin >> sizeX >> sizeY;
-//    cin >> numOfObst;
-//    // Creating obstacles.
-//    for(int i=0; i< numOfObst; i++){
-//        cin >> obstX >> blank >> obstY;
-//        obstacles.push_back(Point(obstX, obstY));
-//    }
-//    MainFlow mainFlow(sizeX, sizeY, obstacles, argv);
     // Run the program.
     mainFlow->run();
     delete mainFlow;

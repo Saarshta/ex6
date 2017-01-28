@@ -150,15 +150,16 @@ Cab* InputParser::createCab(vector<string> inputParts) {
 
     if(!(inputParts[3].compare("R"))) {
         color = Color::RED;
-    } else if (!(inputParts[2].compare("B"))) {
+    } else if (!(inputParts[3].compare("B"))) {
         color = Color::BLUE;
-    } else if (!(inputParts[2].compare("G"))) {
+    } else if (!(inputParts[3].compare("G"))) {
         color = Color::GREEN;
-    } else if (!(inputParts[2].compare("P"))) {
+    } else if (!(inputParts[3].compare("P"))) {
         color = Color::PINK;
-    } else if (!(inputParts[2].compare("W"))) {
+    } else if (!(inputParts[3].compare("W"))) {
         color = Color::WHITE;
     } else {
+        cout << "Color if" << endl;
         return NULL;
     }
 
@@ -173,15 +174,39 @@ Cab* InputParser::createCab(vector<string> inputParts) {
 
 }
 
+bool InputParser::isMapSizesValid(vector<string> mapSizes) {
+    if (mapSizes.size() != 2) {
+        return false;
+    }
+    if (!InputParser::isInt(mapSizes[0]) ||
+        !InputParser::isInt(mapSizes[1])) {
+        return false;
+    }
+    int sizeX, sizeY;
+    stringstream ss(mapSizes[0]);
+    if (!(ss >> sizeX && ss.eof())) {
+        return false;
+    }
+
+    ss.clear();
+    ss.str(std::string());
+    ss.str(mapSizes[1]);
+    if (!(ss >> sizeY &&  ss.eof())) {
+        return false;
+    }
+    if (sizeX <= 0 || sizeY <= 0) {
+        return false;
+    }
+    return true;
+}
+
 MainFlow* InputParser::createMainFlow(vector<string> mapSizes, vector<string> obstNum, char **argv) {
     //cin >> id >> blank >> age >> blank >> maritalSign >> blank >>
     //exp >> blank >> cabID;
-    if (mapSizes.size() != 2 || obstNum.size() != 1) {
+    if (obstNum.size() != 1) {
         return NULL;
     }
-    if (!InputParser::isInt(mapSizes[0]) ||
-        !InputParser::isInt(mapSizes[1]) ||
-            !InputParser::isInt(obstNum[0])) {
+    if (!InputParser::isInt(obstNum[0])) {
         return NULL;
     }
     int sizeX, sizeY, obstaclesNum;
@@ -197,17 +222,13 @@ MainFlow* InputParser::createMainFlow(vector<string> mapSizes, vector<string> ob
     if (!(ss >> sizeY &&  ss.eof())) {
         return NULL;
     }
-    if (sizeX <= 0 || sizeY <= 0) {
-        return NULL;
-    }
     ss.clear();
     ss.str(std::string());
     ss.str(obstNum[0]);
     if (!(ss >> obstaclesNum &&  ss.eof())) {
         return NULL;
     }
-    //test
-    cout << "ObstaclesNum: " << obstaclesNum << endl;
+
 
     for (int i = 0; i < obstaclesNum; i++) {
         string obstacle;

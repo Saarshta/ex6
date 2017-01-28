@@ -22,6 +22,7 @@ public:
     static bool isDigit(char c);
     static bool isInt(string str);
     static bool isDouble(string str);
+    static bool isMapSizesValid(vector<string> mapSizes);
 
 };
 
