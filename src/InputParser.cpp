@@ -4,11 +4,42 @@
 
 #include "InputParser.h"
 
-vector<string> InputParser::splitString(string strToSplit) {
+bool InputParser::isDigit(char c) {
+    if(c < '0' || c > '9') {
+        return false;
+    }
+    return true;
+}
+
+bool InputParser::isInt(string str) {
+    for (int i = 0; i < str.size(); i++) {
+        if (!isDigit(str[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool InputParser::isDouble(string str) {
+    int numOfPoints = 0;
+    for (int i = 0; i < str.size(); i++) {
+        if(str[i] == '.') {
+            numOfPoints++;
+        } else if (!isDigit(str[i])) {
+            return false;
+        }
+    }
+    if (numOfPoints > 1) {
+        return false;
+    }
+    return true;
+}
+
+vector<string> InputParser::splitString(string strToSplit, char splitChar) {
     vector<string> stringFractions;
     string buffer = "";
     for (string::size_type i = 0; i < strToSplit.size(); ++i) {
-        while (strToSplit[i] != ',' && i < strToSplit.size()) {
+        while (strToSplit[i] != splitChar && i < strToSplit.size()) {
             buffer.push_back(strToSplit[i]);
             ++i;
         }
@@ -22,6 +53,12 @@ Driver* InputParser::createDriver(vector<string> inputParts) {
     //cin >> id >> blank >> age >> blank >> maritalSign >> blank >>
     //exp >> blank >> cabID;
     if (inputParts.size() != 5) {
+        return NULL;
+    }
+    if (!InputParser::isInt(inputParts[0]) ||
+        !InputParser::isInt(inputParts[1]) ||
+        !InputParser::isInt(inputParts[3]) ||
+        !InputParser::isInt(inputParts[4])) {
         return NULL;
     }
     int age, id, exp, cabID;
@@ -73,6 +110,10 @@ Cab* InputParser::createCab(vector<string> inputParts) {
     //cin >> newCabID >> blank >> cabType >> blank >>
          //manuSign >> blank >> colorSign;
     if (inputParts.size() != 4) {
+        return NULL;
+    }
+    if (!InputParser::isInt(inputParts[0]) ||
+        !InputParser::isInt(inputParts[1])) {
         return NULL;
     }
     int id, cabType;
@@ -132,53 +173,176 @@ Cab* InputParser::createCab(vector<string> inputParts) {
 
 }
 
-Map* InputParser::createMap(vector<string> inputParts) {
+MainFlow* InputParser::createMainFlow(vector<string> mapSizes, vector<string> obstNum, char **argv) {
     //cin >> id >> blank >> age >> blank >> maritalSign >> blank >>
     //exp >> blank >> cabID;
-    if (inputParts.size() != 5) {
+    if (mapSizes.size() != 2 || obstNum.size() != 1) {
         return NULL;
     }
-    int age, id, exp, cabID;
-    Status status;
-    stringstream ss(inputParts[0]);
-    if (!(ss >> id && ss.eof())) {
+    if (!InputParser::isInt(mapSizes[0]) ||
+        !InputParser::isInt(mapSizes[1]) ||
+            !InputParser::isInt(obstNum[0])) {
+        return NULL;
+    }
+    int sizeX, sizeY, obstaclesNum;
+    vector<Point> obstsVector;
+    stringstream ss(mapSizes[0]);
+    if (!(ss >> sizeX && ss.eof())) {
         return NULL;
     }
 
+    ss.clear();
+    ss.str(std::string());
+    ss.str(mapSizes[1]);
+    if (!(ss >> sizeY &&  ss.eof())) {
+        return NULL;
+    }
+    if (sizeX <= 0 || sizeY <= 0) {
+        return NULL;
+    }
+    ss.clear();
+    ss.str(std::string());
+    ss.str(obstNum[0]);
+    if (!(ss >> obstaclesNum &&  ss.eof())) {
+        return NULL;
+    }
+    //test
+    cout << "ObstaclesNum: " << obstaclesNum << endl;
+
+    for (int i = 0; i < obstaclesNum; i++) {
+        string obstacle;
+        getline(cin, obstacle);
+        int obstX, obstY;
+        vector<string> obstDims = InputParser::splitString(obstacle, ',');
+        if (obstDims.size() != 2) {
+            return NULL;
+        }
+        if (!InputParser::isInt(obstDims[0]) ||
+            !InputParser::isInt(obstDims[1])) {
+            return NULL;
+        }
+        ss.clear();
+        ss.str(std::string());
+        ss.str(obstDims[0]);
+        if (!(ss >> obstX &&  ss.eof())) {
+            return NULL;
+        }
+        ss.clear();
+        ss.str(std::string());
+        ss.str(obstDims[0]);
+        if (!(ss >> obstY &&  ss.eof())) {
+            return NULL;
+        }
+        if (obstX >= sizeX || obstY >= sizeY) {
+            return NULL;
+        }
+        obstsVector.push_back(Point(obstX, obstY));
+    }
+
+    //test
+    cout << "Before returning: "  << endl;
+
+    return new MainFlow(sizeX, sizeY, obstsVector, argv);
+
+
+}
+
+
+Trip* InputParser::createTrip(vector<string> inputParts, Map* map) {
+    //cin >> tripID >> blank >> startX >> blank >> startY >> blank >> endX >> blank >> endY >> blank
+//>> passNum >> blank >> tariff >> blank >> startingTime;
+    int sizeX = map->getSizeX();
+    int sizeY = map->getSizeY();
+    int tripID;
+    int startX, startY, endX, endY;
+    int passNum;
+    int startingTime;
+    float tariff;
+    if (inputParts.size() != 8) {
+        return NULL;
+    }
+    if (!InputParser::isInt(inputParts[0]) ||
+        !InputParser::isInt(inputParts[1]) ||
+        !InputParser::isInt(inputParts[2]) ||
+        !InputParser::isInt(inputParts[3]) ||
+            !InputParser::isInt(inputParts[4]) ||
+            !InputParser::isInt(inputParts[5]) ||
+            !InputParser::isDouble(inputParts[6]) ||
+            !InputParser::isInt(inputParts[7])) {
+        return NULL;
+    }
+    stringstream ss(inputParts[0]);
+    if (!(ss >> tripID && ss.eof())) {
+        return NULL;
+    }
     ss.clear();
     ss.str(std::string());
     ss.str(inputParts[1]);
-    if (!(ss >> age &&  ss.eof())) {
+    if (!(ss >> startX &&  ss.eof())) {
         return NULL;
     }
+
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[2]);
+    if (!(ss >> startY &&  ss.eof())) {
+        return NULL;
+    }
+
     ss.clear();
     ss.str(std::string());
     ss.str(inputParts[3]);
-    if (!(ss >> exp &&  ss.eof())) {
+    if (!(ss >> endX &&  ss.eof())) {
         return NULL;
     }
+
     ss.clear();
     ss.str(std::string());
     ss.str(inputParts[4]);
-    if (!(ss >> cabID &&  ss.eof())) {
-        return NULL;
-    }
-    if (age<=0 || id<0 || exp<0) {
+    if (!(ss >> endY &&  ss.eof())) {
         return NULL;
     }
 
-    if(!(inputParts[2].compare("M"))) {
-        status = Status::MARRIED;
-    } else if (!(inputParts[2].compare("S"))) {
-        status = Status::SINGLE;
-    } else if (!(inputParts[2].compare("D"))) {
-        status = Status::DIVORCED;
-    } else if (!(inputParts[2].compare("W"))) {
-        status = Status::WIDOWED;
-    } else {
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[5]);
+    if (!(ss >> passNum &&  ss.eof())) {
         return NULL;
     }
 
-    return new Driver(id, age, status, exp, cabID);
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[6]);
+    if (!(ss >> tariff &&  ss.eof())) {
+        return NULL;
+    }
 
+    ss.clear();
+    ss.str(std::string());
+    ss.str(inputParts[7]);
+    if (!(ss >> startingTime &&  ss.eof())) {
+        return NULL;
+    }
+    if (startX >= sizeX || endX >= sizeX || startY >= sizeY || endY >= sizeY) {
+        return NULL;
+    }
+
+    if (startX == endX && startY == endY) {
+        return NULL;
+    }
+
+    if(tariff < 0 || tripID < 0 || startingTime <= 0){
+        return NULL;
+    }
+
+    vector<Passenger *> passengers;
+    Point startOfTrip = Point(startX, startY);
+    Point endOfTrip= Point(endX, endY);
+    //creating trip and call the thread of calculating trail
+    AbstractNode* startp = map->getNode(&startOfTrip);
+    AbstractNode* endp = map->getNode(&endOfTrip);
+    return new Trip(tripID, startp, endp, tariff, passengers, startingTime);
 }
+
+
+

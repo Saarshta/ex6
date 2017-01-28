@@ -79,7 +79,7 @@ void MainFlow::run(){
             {
                 this->currentOperation=3;
                 try{
-                    Cab* cab= readCabFromser();
+                    Cab* cab= readCabFromUser();
                     this->taxiCenter->addCab(cab);
                 } catch (invalid_argument inv){
                     //saar?
@@ -149,7 +149,7 @@ void MainFlow::run(){
         pthread_join(*(this->communicationThreadsList[i]), NULL);
     }
 }
-Cab* MainFlow::readCabFromser() throw{
+Cab* MainFlow::readCabFromUser() throw{
     int newCabID;
     char blank;
     Manufacturer manu;

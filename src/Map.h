@@ -15,12 +15,19 @@ class Map {
 private:
     Matrix* map;
     std::vector<Point> obstacles;
+    int sizeX;
+    int sizeY;
 
 public:
     Map(int sizeX, int sizeY, vector<Point> obstacles);
     bool isPointInMap(Point p);
     AbstractNode* getNode(const AbstractPoint* point);
     ~Map();
+
+    int getSizeX() const;
+
+    int getSizeY() const;
+
     void restartDistances();
 };
 

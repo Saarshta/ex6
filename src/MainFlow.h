@@ -35,7 +35,7 @@ public:
 
     Trip* readTripFromUser();
 
-    Cab* readCabFromser();
+    Cab* readCabFromUser();
 
     ~MainFlow();
 

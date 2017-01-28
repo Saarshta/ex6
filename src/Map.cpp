@@ -13,6 +13,8 @@
  */
 Map::Map(int sizeX, int sizeY, vector<Point> obstacles) {
     map = new Matrix(sizeX, sizeY);
+    this->sizeX = sizeX;
+    this->sizeY = sizeY;
     Point currPoint;
     for (int i = 0; i < obstacles.size(); i++) {
         currPoint = obstacles[i];
@@ -52,5 +54,13 @@ void Map::restartDistances() {
 Map::~Map() {
     // Delete the map's matrix.
     delete map;
+}
+
+int Map::getSizeX() const {
+    return sizeX;
+}
+
+int Map::getSizeY() const {
+    return sizeY;
 }
 

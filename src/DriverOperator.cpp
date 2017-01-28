@@ -21,7 +21,7 @@ void DriverOperator::initializeDriver() {
 
     string input;
     getline(cin, input);
-    this->driver = InputParser::createDriver(InputParser::splitString(input));
+    this->driver = InputParser::createDriver(InputParser::splitString(input, ','));
 //    int id, age, exp, cabID;
 //    char blank;
 //    char maritalSign;
