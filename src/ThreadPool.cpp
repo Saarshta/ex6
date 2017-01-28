@@ -23,6 +23,10 @@ void ThreadPool::doJobs() {
 			pthread_mutex_unlock(&lock);
 			//run the task function
 			job->execute();
+			//update how many jobs done untill now
+			pthread_mutex_lock(&counterLock);
+			this->jobsCounter++;
+			pthread_mutex_unlock(&counterLock);
 		}
 		else {
 			pthread_mutex_unlock(&lock);
@@ -37,10 +41,12 @@ void ThreadPool::addJob(Job *job) {
 }
 
 ThreadPool::ThreadPool(int threads_num) : threads_num(threads_num), stop(false) {
+	jobsCounter =0;
 	// TODO Auto-generated constructor stub
 	threads = new pthread_t[threads_num];
 
 	pthread_mutex_init(&lock, NULL);
+	pthread_mutex_init(&counterLock, NULL);
 	for (int i = 0; i < threads_num; i++) {
 		pthread_create(threads + i, NULL, startJobs, this);
 	}
@@ -58,9 +64,14 @@ ThreadPool::~ThreadPool() {
 	// TODO Auto-generated destructor stub
 	delete[] threads;
 	pthread_mutex_destroy(&lock);
+	pthread_mutex_destroy(&counterLock);
 }
 //if dont have jobs return true.
 bool ThreadPool::isEmpty() {
 	return jobs_queue.size()==0;
+}
+
+int ThreadPool::getJobsCounter() const {
+	return jobsCounter;
 }
 

@@ -20,6 +20,10 @@ private:
 	pthread_t* threads;
 	bool stop;
 	pthread_mutex_t lock;
+	pthread_mutex_t counterLock;
+	int jobsCounter;
+
+
 public:
 	ThreadPool(int threads_num);
 	void doJobs();
@@ -27,6 +31,7 @@ public:
 	void terminate();
 	bool isEmpty();
 	virtual ~ThreadPool();
+	int getJobsCounter() const;
 };
 
 #endif /* THREADPOOL_H_ */

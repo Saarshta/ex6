@@ -4,6 +4,7 @@
 
 #include "MainFlow.h"
 #include "ThreadPool.h"
+#include "InputParser.h"
 
 pthread_mutex_t driverCommMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t driverTripMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -34,6 +35,7 @@ void MainFlow::run(){
     int option;
     int acceptNumber;
     char blank;
+    int tripsCounter = 0;
     ThreadPool pool(5);
     MapRestartListener mapListener(map);
     do{
@@ -61,29 +63,33 @@ void MainFlow::run(){
             case 2: // add a trip to taxiCenter as call
             {
                 this->currentOperation=2;
-//                pthread_t* t1 = new pthread_t();
-                Trip* newTrip= readTripFromUser();
+                tripsCounter++;
+                string tripString;
+                getline(cin, tripString);
+                Trip* newTrip = InputParser::createTrip(InputParser::splitString(tripString, ','), map);
+                if (newTrip == NULL) {
+                    cout << "-1" << endl;
+                    break;
+                }
+                //Trip* newTrip= readTripFromUser();
                 // ThreadInfo - holds the paramaters of the thread.
                 ThreadInfo* threadInfo = new ThreadInfo(newTrip, taxiCenter);
                 Job* calcTripJob = new Job(taxiCenter->calcAndAddCall,(void*)threadInfo );
                 pool.addJob(calcTripJob);
-//                threadInfos.push_back(threadInfo);
-//                int status = pthread_create(t1, NULL, taxiCenter->calcAndAddCall, (void*)threadInfo);
-//                if(status){
-//                    throw "could not create thread";
-//                }
-//                this->tripThreadsList.push_back(t1);
+
                 break;
             }
             case 3: // add a cab
             {
-                this->currentOperation=3;
-                try{
-                    Cab* cab= readCabFromUser();
-                    this->taxiCenter->addCab(cab);
-                } catch (invalid_argument inv){
-                    //saar?
+                this->currentOperation = 3;
+                string cabString;
+                getline(cin, cabString);
+                Cab *newCab = InputParser::createCab(InputParser::splitString(cabString, ','));
+                if (newCab == NULL) {
+                    cout << "-1" << endl;
+                    break;
                 }
+                this->taxiCenter->addCab(newCab);
                 break;
             }
             case 4: // print a driver location
@@ -103,10 +109,10 @@ void MainFlow::run(){
                     sleep(1);
                 }
                 //wait for pool to finish calculating trips
-                while(!pool.isEmpty()){
+                while(pool.getJobsCounter() != tripsCounter){
                     sleep(1);
                 }
-                pool.terminate();
+
 
                 //attach calls to drivers on server
                 this->taxiCenter->handleOpenCalls();
@@ -133,6 +139,7 @@ void MainFlow::run(){
         }
     }while(option!=7);
     currentOperation = 7;
+    pool.terminate();
     //send exit to client
     vector<int> descriptors =  this->taxiCenter->getAcceptDescriptors();
     int descriptorsSize =(int) descriptors.size();
@@ -140,88 +147,12 @@ void MainFlow::run(){
     for (int i = 0; i < descriptorsSize; i++) {
         tcp->sendData("7", descriptors[i]);
     }
-    int tripThreadsCount =(int) tripThreadsList.size();
     int communicationThreadsCount= (int)communicationThreadsList.size();
-    for(int i=0; i< tripThreadsCount; i++){
-        pthread_join(*(this->tripThreadsList[i]), NULL);
-    }
     for(int i=0; i< communicationThreadsCount; i++){
         pthread_join(*(this->communicationThreadsList[i]), NULL);
     }
 }
-Cab* MainFlow::readCabFromUser() throw{
-    int newCabID;
-    char blank;
-    Manufacturer manu;
-    Color color;
-    char colorSign, manuSign;
-    int cabType;
-    cin >> newCabID >> blank >> cabType >> blank >>
-        manuSign >> blank >> colorSign;
-    switch (colorSign) {
-        // options are RED, BLUE, GREEN, PINK, WHITE
-        case 'W':
-            color = Color::WHITE;
-            break;
-        case 'P':
-            color = Color::PINK;
-            break;
-        case 'G':
-            color = Color::GREEN;
-            break;
-        case 'B':
-            color = Color::BLUE;
-            break;
-        case 'R':
-            color = Color::RED;
-            break;
-        default:
-            throw invalid_argument("color is invalid");
-    }
-    switch (manuSign) {
-        // options are  HONDA, SUBARO, TESLA, FIAT
-        case 'H':
-            manu = Manufacturer::HONDA;
-            break;
-        case 'S':
-            manu = Manufacturer::SUBARO;
-            break;
-        case 'T':
-            manu = Manufacturer::TESLA;
-            break;
-        case 'F':
-            manu = Manufacturer::FIAT;
-            break;
-        default:
-            throw invalid_argument("manufacturer is invalid");
-    }
-    if (cabType == 1) { //standard cab
-        return  new StandardCab(newCabID, manu, color);
 
-    } else if (cabType == 2) { //luxury cab
-        return new LuxuryCab(newCabID, manu, color);
-
-    } else {
-        throw invalid_argument("cab type is invalid");
-    }
-}
-Trip* MainFlow::readTripFromUser(){
-    int tripID;
-    char blank;
-    int startX, startY, endX, endY;
-    int passNum;
-    int startingTime;
-    float tariff;
-    cin >> tripID >> blank >> startX >> blank >> startY >> blank >> endX >> blank >> endY >> blank
-        >> passNum >> blank >> tariff >> blank >> startingTime;
-    vector<Passenger *> passengers;
-    Point startOfTrip = Point(startX, startY);
-    Point endOfTrip= Point(endX, endY);
-    //creating trip and call the thread of calculating trail
-    AbstractNode* startp = this->map->getNode(&startOfTrip);
-    AbstractNode* endp = this->map->getNode(&endOfTrip);
-    return new Trip(tripID, startp, endp, tariff, passengers, startingTime);
-}
 
 /**
  * communicate - communicates with the driver.
@@ -315,18 +246,10 @@ MainFlow::~MainFlow() {
     delete taxiCenter;
     delete map;
     delete tcp;
-//    // deleting threads.
-//    int tripThreadsCount =(int) tripThreadsList.size();
-//    for(int i=0; i< tripThreadsCount; i++){
-//        delete this->tripThreadsList[i];
-//    }
+
     int communicationThreadsCount= (int)communicationThreadsList.size();
     for(int i=0; i< communicationThreadsCount; i++){
         delete this->communicationThreadsList[i];
     }
-//    int ThreadInfoCount = (int)threadInfos.size();
-//    for(int i=0; i< ThreadInfoCount; i++){
-//        delete this->threadInfos[i];
-//    }
 }
 

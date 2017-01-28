@@ -239,8 +239,6 @@ MainFlow* InputParser::createMainFlow(vector<string> mapSizes, vector<string> ob
         obstsVector.push_back(Point(obstX, obstY));
     }
 
-    //test
-    cout << "Before returning: "  << endl;
 
     return new MainFlow(sizeX, sizeY, obstsVector, argv);
 
