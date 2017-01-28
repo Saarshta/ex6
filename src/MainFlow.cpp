@@ -31,24 +31,19 @@ MainFlow::MainFlow(int sizeX, int sizeY, vector<Point> obstacles, char** argv) {
 void MainFlow::run(){
     // Initializing udp, with the input port.
     int option;
-
     int tripsCounter = 0;
     ThreadPool pool(5);
     MapRestartListener mapListener(map);
     do{
-
-
         // Reading the user's option choice.
         cin >> option;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         switch (option) {
             case 1: // add a driver
             {
-
                 this->currentOperation=1;
                 // Receiving number of drivers.
                 cin >> driversNum;
-
                 //in the for we accept a driver and handle it in new thread.
                 for(int i=0; i< driversNum;i++) {
                     pthread_t* thread = new pthread_t();
@@ -65,7 +60,6 @@ void MainFlow::run(){
             {
 
                 this->currentOperation=2;
-
                 string tripString;
                 getline(cin, tripString);
                 Trip* newTrip = InputParser::createTrip(InputParser::splitString(tripString, ','), map);
@@ -79,12 +73,10 @@ void MainFlow::run(){
                     Job *calcTripJob = new Job(taxiCenter->calcAndAddCall, (void *) threadInfo);
                     pool.addJob(calcTripJob);
                 }
-
                 break;
             }
             case 3: // add a cab
             {
-
                 this->currentOperation = 3;
                 string cabString;
                 getline(cin, cabString);
@@ -94,7 +86,6 @@ void MainFlow::run(){
                 } else {
                     this->taxiCenter->addCab(newCab);
                 }
-
                 break;
             }
             case 4: // print a driver location
@@ -102,7 +93,6 @@ void MainFlow::run(){
                 this->currentOperation=4;
                 int driverToPrintID;
                 cin >> driverToPrintID;
-
                 Driver *driverToPrint = this->taxiCenter->getDriverByID(driverToPrintID);
                 if(driverToPrint == NULL){
                     cout<<"-1"<<endl;
@@ -110,7 +100,6 @@ void MainFlow::run(){
                     cout << *(driverToPrint->getCurrPos()) << endl;
                 }
                 break;
-
             }
             case 9: // move all drivers one step
             {
@@ -123,9 +112,6 @@ void MainFlow::run(){
 
                     sleep(1);
                 }
-
-
-
                 //attach calls to drivers on server
                 this->taxiCenter->handleOpenCalls();
                 // update hour passed in server current time
@@ -146,7 +132,6 @@ void MainFlow::run(){
                 }
                 break;
             }
-
             case 7: {
                 break;
             }
@@ -160,7 +145,6 @@ void MainFlow::run(){
     //send exit to client
     vector<int> descriptors =  this->taxiCenter->getAcceptDescriptors();
     int descriptorsSize =(int) descriptors.size();
-    char buffer[100];
     for (int i = 0; i < descriptorsSize; i++) {
         tcp->sendData("7", descriptors[i]);
     }
@@ -169,7 +153,6 @@ void MainFlow::run(){
         pthread_join(*(this->communicationThreadsList[i]), NULL);
     }
 }
-
 
 /**
  * communicate - communicates with the driver.
@@ -192,8 +175,6 @@ void* MainFlow::communicate(void* mainFlow) {
     boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
     boost::archive::binary_iarchive ia(s2);
     ia >> driver;
-
-
 
     // Setting map, starting point, trip.
     Point startPos(0, 0);
@@ -219,7 +200,6 @@ void* MainFlow::communicate(void* mainFlow) {
     thisMainFlow->currentDriversNumber+=1;
     // keep the communication with this driver
     thisMainFlow->handleDriver(driver, acceptNumber, buffer);
-
 
 }
 
@@ -256,7 +236,6 @@ void MainFlow::handleDriver(Driver* driver, int acceptNumber, char* buffer) {
     }
 
 }
-
 
 
 /**

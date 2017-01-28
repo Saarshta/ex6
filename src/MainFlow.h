@@ -21,9 +21,7 @@ class MainFlow {
 private:
     TaxiCenter* taxiCenter;
     Map* map;
-    vector<pthread_t*> tripThreadsList;
     vector<pthread_t*> communicationThreadsList;
-    vector<ThreadInfo*> threadInfos;
     Socket* tcp;
     int currentOperation;
     int driversNum;
@@ -32,15 +30,8 @@ private:
 
 public:
     MainFlow(int sizeX, int sizeY, vector<Point> obstacle, char** argv);
-
-    Trip* readTripFromUser();
-
-    Cab* readCabFromUser();
-
     ~MainFlow();
-
     void run();
-
     static void* communicate(void* mainFlow);
 
 

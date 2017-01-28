@@ -75,7 +75,6 @@ DriverOperator::~DriverOperator() {
             delete (MatrixNode *) this->driver->getCurrTrip()->getStart();
             delete (MatrixNode *) this->driver->getCurrTrip()->getEnd();
         }
-        //delete this->driver->getCurrPos();
 
         delete driver;
     }

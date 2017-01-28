@@ -1,9 +1,6 @@
-/*
- * Job.h
- *
- *  Created on: Jan 20, 2017
- *      Author: viki
- */
+//
+// Saar Shtalryd 307838854 & Itay Oktan 203036512
+//
 
 #ifndef JOB_H_
 #define JOB_H_
