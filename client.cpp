@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     // Initializing driverOperator.
     DriverOperator driverOperator(tcp);
     // Initializing driver.
-    if (driverOperator.initializeDriver()) { ; // wait for input
+    if (driverOperator.initializeDriver()) { // wait for input
         // Sending the serialized driver.
         driverOperator.sendDriver();
         // Receiving a cab.

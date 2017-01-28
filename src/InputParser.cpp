@@ -365,16 +365,6 @@ Trip* InputParser::createTrip(vector<string> inputParts, Map* map) {
     vector<Passenger *> passengers;
     Point startOfTrip = Point(startX, startY);
     Point endOfTrip= Point(endX, endY);
-//
-//    for (int i = 0; i < obstacles.size(); i++) {
-//        //test
-//        cout<<"obst num:" << obstacles.size()<<endl;
-//        if (startOfTrip == obstacles[i] || endOfTrip == obstacles[i]) {
-//            //test
-//            cout<<"this is an obst! cmonn"<<endl;
-//            return NULL;
-//        }
-//    }
 
     //creating trip and call the thread of calculating trail
     AbstractNode* startp = map->getNode(&startOfTrip);

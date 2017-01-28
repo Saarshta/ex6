@@ -66,16 +66,19 @@ Driver *DriverOperator::getDriver() const {
  */
 DriverOperator::~DriverOperator() {
     delete tcp;
-    delete (driver->getCab());
-    MatrixNode* tempNode = (MatrixNode*)this->driver->getCurrPos();
-    //tempNode->destroyLocation();
-    delete tempNode;
-    if(isActiveTrip()) {
-        delete (MatrixNode *) this->driver->getCurrTrip()->getStart();
-        delete (MatrixNode *) this->driver->getCurrTrip()->getEnd();
+    if(driver!= NULL) {
+        delete (driver->getCab());
+        MatrixNode *tempNode = (MatrixNode *) this->driver->getCurrPos();
+        //tempNode->destroyLocation();
+        delete tempNode;
+        if (isActiveTrip()) {
+            delete (MatrixNode *) this->driver->getCurrTrip()->getStart();
+            delete (MatrixNode *) this->driver->getCurrTrip()->getEnd();
+        }
+        //delete this->driver->getCurrPos();
+
+        delete driver;
     }
-    //delete this->driver->getCurrPos();
-    delete driver;
 }
 /**
  * sendDriver - serialize the driver and send it through the udp.
