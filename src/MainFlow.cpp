@@ -7,8 +7,6 @@
 #include "InputParser.h"
 
 pthread_mutex_t driverCommMutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t driverTripMutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t driverLocationMutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * MainFlow constructor.
@@ -33,8 +31,7 @@ MainFlow::MainFlow(int sizeX, int sizeY, vector<Point> obstacles, char** argv) {
 void MainFlow::run(){
     // Initializing udp, with the input port.
     int option;
-    int acceptNumber;
-    char blank;
+
     int tripsCounter = 0;
     ThreadPool pool(5);
     MapRestartListener mapListener(map);
@@ -76,7 +73,7 @@ void MainFlow::run(){
                     cout << "-1" << endl;
                 } else {
                     tripsCounter++;
-                    //Trip* newTrip= readTripFromUser();
+
                     // ThreadInfo - holds the paramaters of the thread.
                     ThreadInfo *threadInfo = new ThreadInfo(newTrip, taxiCenter);
                     Job *calcTripJob = new Job(taxiCenter->calcAndAddCall, (void *) threadInfo);

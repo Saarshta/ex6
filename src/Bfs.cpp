@@ -28,25 +28,30 @@ std::stack<AbstractNode *> *Bfs::calcTrail(AbstractNode *start, AbstractNode *en
         current = queue.front();
         queue.pop();
         // Go through of all of a node's neighbours.
-        for (int i = 0; i < current->getNeighboursNum(); i++) {
-            neighbour = current->getNeighbours()[i];
-            // If the neighbour has not been visited yet.
-            if(neighbour->getDistance() == -1 && (! neighbour->isIsObst())) {
-                // Update the neighbour's distance from the start.
-                neighbour->setDistance(current->getDistance() + 1);
-                // Set the neighbour's previous node.
-                neighbour->setPrev(current);
-                // Add to the queue.
-                queue.push(neighbour);
-            }
-            /*
-             * If the end node has been found, there is no need to continue
-             * the loops.
-             */
-            if (neighbour == end) {
-                isEndFound = true;
-                break;
-            }
+
+
+            for (int i = 0; i < current->getNeighboursNum(); i++) {
+                if ((!current->isIsObst()) && (!current->getNeighbours()[i]->isIsObst())) {
+                    neighbour = current->getNeighbours()[i];
+                    // If the neighbour has not been visited yet.
+                    if (neighbour->getDistance() == -1) {
+                        // Update the neighbour's distance from the start.
+                        neighbour->setDistance(current->getDistance() + 1);
+                        // Set the neighbour's previous node.
+                        neighbour->setPrev(current);
+                        // Add to the queue.
+                        queue.push(neighbour);
+                    }
+                    /*
+                     * If the end node has been found, there is no need to continue
+                     * the loops.
+                     */
+                    if (neighbour == end) {
+                        isEndFound = true;
+                        break;
+                    }
+                }
+
         }
         if (isEndFound) {
             break;
@@ -67,6 +72,7 @@ std::stack<AbstractNode *> *Bfs::calcTrail(AbstractNode *start, AbstractNode *en
     }
     // Adding the start node to the trail.
     stack->push(traceBack);
+
     return stack;
 
 }

@@ -16,6 +16,7 @@ Map::Map(int sizeX, int sizeY, vector<Point> obstacles) {
     this->sizeX = sizeX;
     this->sizeY = sizeY;
     Point currPoint;
+    this->obstacles = obstacles;
     for (int i = 0; i < obstacles.size(); i++) {
         currPoint = obstacles[i];
         map->getNode(&currPoint)->setIsObst(true);

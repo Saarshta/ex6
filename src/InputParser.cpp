@@ -250,7 +250,7 @@ MainFlow* InputParser::createMainFlow(vector<string> mapSizes, vector<string> ob
         }
         ss.clear();
         ss.str(std::string());
-        ss.str(obstDims[0]);
+        ss.str(obstDims[1]);
         if (!(ss >> obstY &&  ss.eof())) {
             return NULL;
         }
@@ -365,12 +365,16 @@ Trip* InputParser::createTrip(vector<string> inputParts, Map* map) {
     vector<Passenger *> passengers;
     Point startOfTrip = Point(startX, startY);
     Point endOfTrip= Point(endX, endY);
-
-    for (int i = 0; i < obstacles.size(); i++) {
-        if (startOfTrip == obstacles[i] || endOfTrip == obstacles[i]) {
-            return NULL;
-        }
-    }
+//
+//    for (int i = 0; i < obstacles.size(); i++) {
+//        //test
+//        cout<<"obst num:" << obstacles.size()<<endl;
+//        if (startOfTrip == obstacles[i] || endOfTrip == obstacles[i]) {
+//            //test
+//            cout<<"this is an obst! cmonn"<<endl;
+//            return NULL;
+//        }
+//    }
 
     //creating trip and call the thread of calculating trail
     AbstractNode* startp = map->getNode(&startOfTrip);
