@@ -39,11 +39,16 @@ void MainFlow::run(){
     ThreadPool pool(5);
     MapRestartListener mapListener(map);
     do{
+
+
         // Reading the user's option choice.
         cin >> option;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         switch (option) {
             case 1: // add a driver
             {
+                //test
+                cout << "entering driver" << endl;
                 this->currentOperation=1;
                 // Receiving number of drivers.
                 cin >> driversNum;
@@ -62,34 +67,42 @@ void MainFlow::run(){
             }
             case 2: // add a trip to taxiCenter as call
             {
+                //test
+                cout << "entering trip" << endl;
                 this->currentOperation=2;
-                tripsCounter++;
+
                 string tripString;
                 getline(cin, tripString);
                 Trip* newTrip = InputParser::createTrip(InputParser::splitString(tripString, ','), map);
                 if (newTrip == NULL) {
                     cout << "-1" << endl;
-                    break;
+                } else {
+                    tripsCounter++;
+                    //Trip* newTrip= readTripFromUser();
+                    // ThreadInfo - holds the paramaters of the thread.
+                    ThreadInfo *threadInfo = new ThreadInfo(newTrip, taxiCenter);
+                    Job *calcTripJob = new Job(taxiCenter->calcAndAddCall, (void *) threadInfo);
+                    pool.addJob(calcTripJob);
                 }
-                //Trip* newTrip= readTripFromUser();
-                // ThreadInfo - holds the paramaters of the thread.
-                ThreadInfo* threadInfo = new ThreadInfo(newTrip, taxiCenter);
-                Job* calcTripJob = new Job(taxiCenter->calcAndAddCall,(void*)threadInfo );
-                pool.addJob(calcTripJob);
-
+                //test
+                cout << "exiting trip" << endl;
                 break;
             }
             case 3: // add a cab
             {
+                //test
+                cout << "entering cab" << endl;
                 this->currentOperation = 3;
                 string cabString;
                 getline(cin, cabString);
                 Cab *newCab = InputParser::createCab(InputParser::splitString(cabString, ','));
                 if (newCab == NULL) {
                     cout << "-1" << endl;
-                    break;
+                } else {
+                    this->taxiCenter->addCab(newCab);
                 }
-                this->taxiCenter->addCab(newCab);
+                //test
+                cout << "exiting cab" << endl;
                 break;
             }
             case 4: // print a driver location
@@ -97,8 +110,13 @@ void MainFlow::run(){
                 this->currentOperation=4;
                 int driverToPrintID;
                 cin >> driverToPrintID;
+
                 Driver *driverToPrint = this->taxiCenter->getDriverByID(driverToPrintID);
-                cout << *(driverToPrint->getCurrPos()) << endl;
+                if(driverToPrint == NULL){
+                    cout<<"-1"<<endl;
+                } else {
+                    cout << *(driverToPrint->getCurrPos()) << endl;
+                }
                 break;
 
             }
@@ -110,9 +128,13 @@ void MainFlow::run(){
                 }
                 //wait for pool to finish calculating trips
                 while(pool.getJobsCounter() != tripsCounter){
+                    //test
+                    cout << "in pool : "<< pool.getJobsCounter() <<" in mainflow : " << tripsCounter << endl;
                     sleep(1);
                 }
 
+                //test
+                cout << "finisehd waiting"<< endl;
 
                 //attach calls to drivers on server
                 this->taxiCenter->handleOpenCalls();
@@ -134,7 +156,12 @@ void MainFlow::run(){
                 }
                 break;
             }
+
+            case 7: {
+                break;
+            }
             default: //ignoring non valid options.
+                cout << "-1" << endl;
                 break;
         }
     }while(option!=7);
@@ -175,6 +202,9 @@ void* MainFlow::communicate(void* mainFlow) {
     boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
     boost::archive::binary_iarchive ia(s2);
     ia >> driver;
+
+    //test
+    cout << "got driver , id: " << driver->getId() << endl;
 
     // Setting map, starting point, trip.
     Point startPos(0, 0);

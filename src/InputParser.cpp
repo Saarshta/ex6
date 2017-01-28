@@ -325,17 +325,32 @@ Trip* InputParser::createTrip(vector<string> inputParts, Map* map) {
         return NULL;
     }
 
+    if (startX < 0 || endX < 0 || startY < 0 || endY < 0) {
+        return NULL;
+    }
+
     if (startX == endX && startY == endY) {
         return NULL;
     }
 
-    if(tariff < 0 || tripID < 0 || startingTime <= 0){
+    if(tariff < 0 || tripID < 0 || startingTime <= 0 || passNum <= 0){
         return NULL;
     }
+
+    vector<Point> obstacles = map->getObstacles();
+
+
 
     vector<Passenger *> passengers;
     Point startOfTrip = Point(startX, startY);
     Point endOfTrip= Point(endX, endY);
+
+    for (int i = 0; i < obstacles.size(); i++) {
+        if (startOfTrip == obstacles[i] || endOfTrip == obstacles[i]) {
+            return NULL;
+        }
+    }
+
     //creating trip and call the thread of calculating trail
     AbstractNode* startp = map->getNode(&startOfTrip);
     AbstractNode* endp = map->getNode(&endOfTrip);

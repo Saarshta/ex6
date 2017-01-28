@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
         getline(cin, numOfObsts);
         mainFlow = InputParser::createMainFlow(InputParser::splitString(sizes, ' '),
                                                InputParser::splitString(numOfObsts, ' '), argv);
-        cout << "MainFlow: " << mainFlow;
     }
 
 //    int sizeX;
@@ -37,5 +36,6 @@ int main(int argc, char **argv) {
 //    MainFlow mainFlow(sizeX, sizeY, obstacles, argv);
     // Run the program.
     mainFlow->run();
+    delete mainFlow;
     return 0;
 }

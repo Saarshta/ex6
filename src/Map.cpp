@@ -64,3 +64,7 @@ int Map::getSizeY() const {
     return sizeY;
 }
 
+const vector<Point> &Map::getObstacles() const {
+    return obstacles;
+}
+

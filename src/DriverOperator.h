@@ -23,7 +23,7 @@ public:
 
     virtual ~DriverOperator();
 
-    void initializeDriver();
+    bool initializeDriver();
     Driver *getDriver() const;
     bool isActiveTrip();
 

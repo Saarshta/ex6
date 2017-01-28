@@ -17,7 +17,7 @@ DriverOperator::DriverOperator(Socket *tcp) : tcp(tcp) {
  * initializeDriver - get input from user throgh console and
  * create a new driver and assign it as member.
  */
-void DriverOperator::initializeDriver() {
+bool DriverOperator::initializeDriver() {
 
     string input;
     getline(cin, input);
@@ -45,9 +45,12 @@ void DriverOperator::initializeDriver() {
 //        default:
 //            throw invalid_argument("marital status is invalid");
 //    }
-
+    if (this->driver == NULL) {
+        return false;
+    }
     AbstractNode* startNode = new MatrixNode(Point(0,0));
     this->driver->setCurrPos(startNode);
+    return true;
 }
 /**
  * getter of driver member.

@@ -18,11 +18,17 @@ void ThreadPool::doJobs() {
 	while (!stop) {
 		pthread_mutex_lock(&lock);
 		if (!jobs_queue.empty()) {
+			//test
+			cout << "current jobs are : "<< jobs_queue.size()<<endl;
 			Job* job = jobs_queue.front();
 			jobs_queue.pop();
 			pthread_mutex_unlock(&lock);
+			//test
+			cout << "goint to calc the trip!" << endl;
 			//run the task function
 			job->execute();
+			//test
+			cout << "finish calc the trip! " << endl;
 			//update how many jobs done untill now
 			pthread_mutex_lock(&counterLock);
 			this->jobsCounter++;
@@ -37,6 +43,8 @@ void ThreadPool::doJobs() {
 }
 
 void ThreadPool::addJob(Job *job) {
+	//test
+	cout << "adding a job muthaphakka"<<endl;
 	jobs_queue.push(job);
 }
 

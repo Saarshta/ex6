@@ -24,6 +24,8 @@ public:
     AbstractNode* getNode(const AbstractPoint* point);
     ~Map();
 
+    const vector<Point> &getObstacles() const;
+
     int getSizeX() const;
 
     int getSizeY() const;

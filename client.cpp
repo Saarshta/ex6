@@ -16,22 +16,22 @@ int main(int argc, char *argv[]) {
     // Initializing driverOperator.
     DriverOperator driverOperator(tcp);
     // Initializing driver.
-    driverOperator.initializeDriver(); // wait for input
-    // Sending the serialized driver.
-    driverOperator.sendDriver();
-    // Receiving a cab.
-    driverOperator.receiveCab();
+    if (driverOperator.initializeDriver()) { ; // wait for input
+        // Sending the serialized driver.
+        driverOperator.sendDriver();
+        // Receiving a cab.
+        driverOperator.receiveCab();
 
 
-    while(true) {
-        // Receiving input from server.
-        driverOperator.receivingData();
-        // Check if it's 7, if it is, break.
-        if(driverOperator.isDataEnd()){
-            break;
-        }
+        while (true) {
+            // Receiving input from server.
+            driverOperator.receivingData();
+            // Check if it's 7, if it is, break.
+            if (driverOperator.isDataEnd()) {
+                break;
+            }
             driverOperator.updateLocation();
+        }
     }
-
     return 0;
 }
