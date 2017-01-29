@@ -27,6 +27,7 @@ void ThreadPool::doJobs() {
 			pthread_mutex_unlock(&lock);
 			//run the task function
 			job->execute();
+            delete job;
 			//update how many jobs done untill now
 			pthread_mutex_lock(&counterLock);
 			this->jobsCounter++;

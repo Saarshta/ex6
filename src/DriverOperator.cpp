@@ -13,6 +13,7 @@ DriverOperator::DriverOperator(Socket *tcp) : tcp(tcp) {
     driver = 0;
     end = buffer + 69999;
 }
+
 /**
  * initializeDriver - get input from user throgh console and
  * create a new driver and assign it as member.
@@ -48,10 +49,11 @@ bool DriverOperator::initializeDriver() {
     if (this->driver == NULL) {
         return false;
     }
-    AbstractNode* startNode = new MatrixNode(Point(0,0));
+    AbstractNode *startNode = new MatrixNode(Point(0, 0));
     this->driver->setCurrPos(startNode);
     return true;
 }
+
 /**
  * getter of driver member.
  * @return driver
@@ -59,6 +61,7 @@ bool DriverOperator::initializeDriver() {
 Driver *DriverOperator::getDriver() const {
     return driver;
 }
+
 /**
  * Destructor of DriverOperator.
  * delete the udp, the driver and its members like:
@@ -66,7 +69,7 @@ Driver *DriverOperator::getDriver() const {
  */
 DriverOperator::~DriverOperator() {
     delete tcp;
-    if(driver!= NULL) {
+    if (driver != NULL) {
         delete (driver->getCab());
         MatrixNode *tempNode = (MatrixNode *) this->driver->getCurrPos();
         //tempNode->destroyLocation();
@@ -79,6 +82,7 @@ DriverOperator::~DriverOperator() {
         delete driver;
     }
 }
+
 /**
  * sendDriver - serialize the driver and send it through the udp.
  */
@@ -93,13 +97,14 @@ void DriverOperator::sendDriver() {
     tcp->sendData(serial_str, 1);
 
 }
+
 /**
  * receiveCab - get a serialized cab through udp, deserialize it
  * and assign it to the driver.
  */
 void DriverOperator::receiveCab() {
 
-    Cab* cab = 0;
+    Cab *cab = 0;
     tcp->reciveData(buffer, sizeof(buffer), 1);
     boost::iostreams::basic_array_source<char> device(buffer, end);
     boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
@@ -108,28 +113,30 @@ void DriverOperator::receiveCab() {
     this->driver->setCab(cab);
 
 }
+
 /**
  * updateLocation - get a serialized position, deserialize it and assign it
  * to the driver. check if the position is in end of trip, then end trip.
  */
 void DriverOperator::updateLocation() {
-    AbstractNode* node = 0;
+    AbstractNode *node = 0;
     boost::iostreams::basic_array_source<char> device(buffer, end);
     boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
     boost::archive::binary_iarchive ia(s2);
     ia >> node;
-    MatrixNode* tempNode = (MatrixNode*)this->driver->getCurrPos();
+    MatrixNode *tempNode = (MatrixNode *) this->driver->getCurrPos();
     delete tempNode;
     this->driver->setCurrPos(node);
     //test
     cout << "New client node:" << *(this->driver->getCurrPos()) << endl;
 }
+
 /**
  * updateTrip - get a serialized trip, deserialize it and assign to driver.
  */
 void DriverOperator::updateTrip() {
 
-    Trip* trip = 0;
+    Trip *trip = 0;
     boost::iostreams::basic_array_source<char> device(buffer, end);
     boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
     boost::archive::binary_iarchive ia(s2);
@@ -137,6 +144,7 @@ void DriverOperator::updateTrip() {
     this->driver->setClientTrip(trip);
 
 }
+
 /**
  * isActiveTrip - return true if the driver has a trip, else otherwise.
  * @return
@@ -145,17 +153,19 @@ bool DriverOperator::isActiveTrip() {
 
     return !this->driver->getCurrTrip() == 0;
 }
+
 /**
  * receivingData - wait for data through the socket.
  */
 void DriverOperator::receivingData() {
     tcp->reciveData(buffer, sizeof(buffer), 1);
 }
+
 /**
  * isDataEnd - check if we got a "7" thorugh socket that indicates the
  * end of program.
  * @return
  */
 bool DriverOperator::isDataEnd() {
-    return strcmp(buffer, "7")==0;
+    return strcmp(buffer, "7") == 0;
 }

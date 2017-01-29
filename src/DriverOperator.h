@@ -8,23 +8,26 @@
 #include "Driver.h"
 #include "Socket.h"
 #include "InputParser.h"
+
 /**
  * DriverOperator class . Holds a udp and a driver, and
  * functions which send and recieve driver data through the udp.
  */
 class DriverOperator {
 private:
-    Driver* driver;
-    Socket* tcp;
+    Driver *driver;
+    Socket *tcp;
     char buffer[70000];
-    char* end;
+    char *end;
 public:
-    DriverOperator(Socket* tcp);
+    DriverOperator(Socket *tcp);
 
     virtual ~DriverOperator();
 
     bool initializeDriver();
+
     Driver *getDriver() const;
+
     bool isActiveTrip();
 
     void receivingData();
@@ -36,6 +39,7 @@ public:
     void receiveCab();
 
     void updateLocation();
+
     void updateTrip();
 
 };

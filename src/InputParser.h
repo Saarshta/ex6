@@ -1,5 +1,5 @@
 //
-// Created by saar on 26/01/17.
+// Saar Shtalryd 307838854 & Itay Oktan 203036512
 //
 
 #ifndef EX5_INPUTPARSER_H

@@ -15,12 +15,12 @@ pthread_mutex_t driverCommMutex = PTHREAD_MUTEX_INITIALIZER;
  * @param obstacles A vector of obstacles for the map.
  * @return nothing.
  */
-MainFlow::MainFlow(int sizeX, int sizeY, vector<Point> obstacles, char** argv) {
+MainFlow::MainFlow(int sizeX, int sizeY, vector<Point> obstacles, char **argv) {
     map = new Map(sizeX, sizeY, obstacles);
     taxiCenter = new TaxiCenter(map);
-    currentOperation =0;
+    currentOperation = 0;
     currentDriversNumber = 0;
-    tcp= new Tcp(1, atoi(argv[1]));
+    tcp = new Tcp(1, atoi(argv[1]));
     tcp->initialize();
 }
 
@@ -28,27 +28,27 @@ MainFlow::MainFlow(int sizeX, int sizeY, vector<Point> obstacles, char** argv) {
  * run - runs the program's flow.
  * @param argv the program's arguments.
  */
-void MainFlow::run(){
+void MainFlow::run() {
     // Initializing udp, with the input port.
     int option;
     int tripsCounter = 0;
     ThreadPool pool(5);
     MapRestartListener mapListener(map);
-    do{
+    do {
         // Reading the user's option choice.
         cin >> option;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         switch (option) {
             case 1: // add a driver
             {
-                this->currentOperation=1;
+                this->currentOperation = 1;
                 // Receiving number of drivers.
                 cin >> driversNum;
                 //in the for we accept a driver and handle it in new thread.
-                for(int i=0; i< driversNum;i++) {
-                    pthread_t* thread = new pthread_t();
-                    int status = pthread_create(thread, NULL, communicate, (void*)this);
-                    if(status){
+                for (int i = 0; i < driversNum; i++) {
+                    pthread_t *thread = new pthread_t();
+                    int status = pthread_create(thread, NULL, communicate, (void *) this);
+                    if (status) {
                         throw "could not create thread";
                     }
                     // Adding to an array of threads.
@@ -59,10 +59,10 @@ void MainFlow::run(){
             case 2: // add a trip to taxiCenter as call
             {
 
-                this->currentOperation=2;
+                this->currentOperation = 2;
                 string tripString;
                 getline(cin, tripString);
-                Trip* newTrip = InputParser::createTrip(InputParser::splitString(tripString, ','), map);
+                Trip *newTrip = InputParser::createTrip(InputParser::splitString(tripString, ','), map);
                 if (newTrip == NULL) {
                     cout << "-1" << endl;
                 } else {
@@ -90,12 +90,12 @@ void MainFlow::run(){
             }
             case 4: // print a driver location
             {
-                this->currentOperation=4;
+                this->currentOperation = 4;
                 int driverToPrintID;
                 cin >> driverToPrintID;
                 Driver *driverToPrint = this->taxiCenter->getDriverByID(driverToPrintID);
-                if(driverToPrint == NULL){
-                    cout<<"-1"<<endl;
+                if (driverToPrint == NULL) {
+                    cout << "-1" << endl;
                 } else {
                     cout << *(driverToPrint->getCurrPos()) << endl;
                 }
@@ -104,11 +104,11 @@ void MainFlow::run(){
             case 9: // move all drivers one step
             {
                 //wait for all drivers to be initialized
-                while(currentDriversNumber!=driversNum){
+                while (currentDriversNumber != driversNum) {
                     sleep(1);
                 }
                 //wait for pool to finish calculating trips
-                while(pool.getJobsCounter() != tripsCounter){
+                while (pool.getJobsCounter() != tripsCounter) {
 
                     sleep(1);
                 }
@@ -119,13 +119,13 @@ void MainFlow::run(){
                 //drive drivers with trips time < current time
                 this->taxiCenter->drive();
                 // update currentoperation to 9 for updating clients
-                this->currentOperation=9;
+                this->currentOperation = 9;
                 bool stillNeedToUpdate = true;
-                while(stillNeedToUpdate){
+                while (stillNeedToUpdate) {
                     stillNeedToUpdate = false;
                     //go over all drivers -check if someone needs to be updated
-                    for(int i=0;i<driversNum;i++){
-                        if(this->taxiCenter->getDrivers()[i]->isNeedToupdateClient()){
+                    for (int i = 0; i < driversNum; i++) {
+                        if (this->taxiCenter->getDrivers()[i]->isNeedToupdateClient()) {
                             stillNeedToUpdate = true;
                         }
                     }
@@ -139,17 +139,17 @@ void MainFlow::run(){
                 cout << "-1" << endl;
                 break;
         }
-    }while(option!=7);
+    } while (option != 7);
     currentOperation = 7;
     pool.terminate();
     //send exit to client
-    vector<int> descriptors =  this->taxiCenter->getAcceptDescriptors();
-    int descriptorsSize =(int) descriptors.size();
+    vector<int> descriptors = this->taxiCenter->getAcceptDescriptors();
+    int descriptorsSize = (int) descriptors.size();
     for (int i = 0; i < descriptorsSize; i++) {
         tcp->sendData("7", descriptors[i]);
     }
-    int communicationThreadsCount= (int)communicationThreadsList.size();
-    for(int i=0; i< communicationThreadsCount; i++){
+    int communicationThreadsCount = (int) communicationThreadsList.size();
+    for (int i = 0; i < communicationThreadsCount; i++) {
         pthread_join(*(this->communicationThreadsList[i]), NULL);
     }
 }
@@ -159,14 +159,14 @@ void MainFlow::run(){
  * @param mainFlow the MainFlow.
  * @return nothing.
  */
-void* MainFlow::communicate(void* mainFlow) {
+void *MainFlow::communicate(void *mainFlow) {
 
-    MainFlow* thisMainFlow = ((MainFlow*)mainFlow);
+    MainFlow *thisMainFlow = ((MainFlow *) mainFlow);
     // Accepting the client.
     int acceptNumber = thisMainFlow->tcp->acceptDescriptorCommunicate();
     thisMainFlow->taxiCenter->updateDescriptors(acceptNumber);
     char buffer[70000];
-    char* end = buffer+69999;
+    char *end = buffer + 69999;
 
     // Receiving driver from client.
     Driver *driver;
@@ -197,7 +197,7 @@ void* MainFlow::communicate(void* mainFlow) {
     oa << (cab);
     s.flush();
     thisMainFlow->tcp->sendData(serial_str, acceptNumber);
-    thisMainFlow->currentDriversNumber+=1;
+    thisMainFlow->currentDriversNumber += 1;
     // keep the communication with this driver
     thisMainFlow->handleDriver(driver, acceptNumber, buffer);
 
@@ -210,16 +210,16 @@ void* MainFlow::communicate(void* mainFlow) {
  * @param acceptNumber the driver's accept descriptor.
  * @param buffer the tcp's buffer.
  */
-void MainFlow::handleDriver(Driver* driver, int acceptNumber, char* buffer) {
-    AbstractNode* lastPosition = NULL;
-    while(currentOperation != 7){
-        if(currentOperation == 9){
+void MainFlow::handleDriver(Driver *driver, int acceptNumber, char *buffer) {
+    AbstractNode *lastPosition = NULL;
+    while (currentOperation != 7) {
+        if (currentOperation == 9) {
             AbstractNode *currentPosition = driver->getCurrPos();
             if (currentPosition == lastPosition) {
                 driver->setNeedToupdateClient(false);
             }
             //check if the driver has trip
-            if(currentPosition != lastPosition){
+            if (currentPosition != lastPosition) {
 
                 // Serialize and send new location of driver.
                 std::string serial_str;
@@ -246,8 +246,8 @@ MainFlow::~MainFlow() {
     delete map;
     delete tcp;
 
-    int communicationThreadsCount= (int)communicationThreadsList.size();
-    for(int i=0; i< communicationThreadsCount; i++){
+    int communicationThreadsCount = (int) communicationThreadsList.size();
+    for (int i = 0; i < communicationThreadsCount; i++) {
         delete this->communicationThreadsList[i];
     }
 }
