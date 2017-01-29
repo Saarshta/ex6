@@ -26,7 +26,7 @@ private:
     int currentOperation;
     int driversNum;
     int currentDriversNumber;
-    void handleDriver(Driver* driver, int acceptNumber, char* buffer);
+    void handleDriver(Driver* driver, int acceptNumber);
 
 public:
     MainFlow(int sizeX, int sizeY, vector<Point> obstacle, char** argv);

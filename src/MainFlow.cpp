@@ -199,7 +199,7 @@ void *MainFlow::communicate(void *mainFlow) {
     thisMainFlow->tcp->sendData(serial_str, acceptNumber);
     thisMainFlow->currentDriversNumber += 1;
     // keep the communication with this driver
-    thisMainFlow->handleDriver(driver, acceptNumber, buffer);
+    thisMainFlow->handleDriver(driver, acceptNumber);
 
 }
 
@@ -210,14 +210,11 @@ void *MainFlow::communicate(void *mainFlow) {
  * @param acceptNumber the driver's accept descriptor.
  * @param buffer the tcp's buffer.
  */
-void MainFlow::handleDriver(Driver *driver, int acceptNumber, char *buffer) {
+void MainFlow::handleDriver(Driver *driver, int acceptNumber) {
     AbstractNode *lastPosition = NULL;
     while (currentOperation != 7) {
         if (currentOperation == 9) {
             AbstractNode *currentPosition = driver->getCurrPos();
-            if (currentPosition == lastPosition) {
-                driver->setNeedToupdateClient(false);
-            }
             //check if the driver has trip
             if (currentPosition != lastPosition) {
 
