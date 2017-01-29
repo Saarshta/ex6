@@ -90,6 +90,10 @@ void MainFlow::run() {
             }
             case 4: // print a driver location
             {
+                //wait for all drivers to be initialized
+                while (currentDriversNumber != driversNum) {
+                    sleep(1);
+                }
                 this->currentOperation = 4;
                 int driverToPrintID;
                 cin >> driverToPrintID;
